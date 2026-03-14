@@ -258,10 +258,8 @@ module "ami_backup" {
   }
 
   source_amis     = {
-  #frontend = "ami-0eec7485a34edc3b8"
   frontend = "ami-0702f87daba5be411"
   backend = "ami-0b03a5625363bf260"
-  #backend = "ami-0084f9ebbb4f07bcd"
 }
 }
 
