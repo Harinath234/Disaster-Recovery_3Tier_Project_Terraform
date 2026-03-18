@@ -78,12 +78,45 @@ This section shows how traffic flows and how AWS handles failover using real scr
 
 ---
 
+## 🌐 Network Architecture (Multi-Region VPC)
+
+This section shows the underlying VPC design across both regions.
+
+---
+
+### 🏢 Primary Region VPC (us-east-1 - North Virginia)
+
+- Multi-AZ VPC architecture  
+- Public subnets for Load Balancer  
+- Private subnets for application and database layers  
+
+![North Virginia VPC](screenshots/North-Virginia_us-east-1/VPC/VPC-resource-output-1.png)
+
+---
+
+### 🌎 Secondary Region VPC (us-west-2 - Oregon)
+
+- Identical VPC setup for disaster recovery  
+- Ensures seamless failover and consistency  
+
+![Oregon VPC](screenshots/Oregon_us-west-2/VPC/VPC-2.png)
+
+---
+
+## 🔁 Route 53 Backend Failover Flow
+
+- Route 53 routes traffic to backend load balancer  
+- Under normal conditions → Primary region serves traffic  
+- During failure → Traffic automatically redirected to DR region  
+
+![Route53 Backend Flow](screenshots/Oregon_us-west-2/Route53/Route-53-1.png)
+
 ## 🛠️ Infrastructure as Code (Terraform)
 
 - Entire infrastructure is provisioned using Terraform  
 - Modular design for multi-region deployment  
 - Enables consistent and repeatable deployments
-- 
+ 
 ## 🚀 Summary of Failover
 
 - DNS-level failover ensures zero manual intervention during outages
@@ -123,11 +156,9 @@ This section shows how traffic flows and how AWS handles failover using real scr
 - Zero manual failover
 - Improved reliability for production workloads
 
-### 📷 Architecture Diagram (Optional)
-
-> Add your architecture diagram here for better visualization.
-
 ### 📁 Notes
 
-- Ensure both regions have identical infrastructure and deployments.
-- Health check thresholds should be configured carefully to avoid false failovers.
+- Both regions are configured with identical infrastructure to ensure consistent failover behavior  
+- Route 53 health check thresholds are tuned to avoid false failover triggers  
+- RDS cross-region replication is asynchronous, which may introduce minimal replication lag  
+- Regular testing of failover scenarios is recommended to validate disaster recovery readiness  
