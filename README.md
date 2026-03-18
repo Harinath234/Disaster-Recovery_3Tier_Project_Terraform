@@ -14,6 +14,8 @@ This project implements a **highly available and fault-tolerant architecture** b
 
 ## 🌐 Traffic Flow
 
+User → Route53 → Primary → Failover → Secondary
+
 ![Architecture Diagram](screenshots/North-Virginia_us-east-1/Architecture_Images/ArchitectureDiagram-TrafficFlow.png)
 
 ## 🔁 Failover Demonstration (Step-by-Step)
