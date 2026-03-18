@@ -1,58 +1,49 @@
-🚀 Disaster Recovery 3-Tier Architecture using Terraform (AWS)
+## 🌐 Multi-Region Failover Architecture using AWS Route 53
 
-This project demonstrates a production-grade 3-tier architecture with Disaster Recovery (DR) on AWS using Terraform.
+This project implements a **highly available and fault-tolerant architecture** by routing traffic between AWS regions using **Route 53 DNS failover**.
 
-It is designed to ensure high availability, fault tolerance, and business continuity using a multi-region failover architecture with DNS-based traffic routing.
+### 📌 Architecture Overview
 
-🏗️ Architecture Overview
+- **Primary Region:** North Virginia (`us-east-1`)
+- **Secondary (Failover) Region:** Oregon (`us-west-2`)
+- **Traffic Management:** AWS Route 53 (DNS-level failover routing)
 
-This solution follows a 3-tier architecture pattern:
+### ⚙️ How It Works
 
-🔹 Web Layer (Frontend)
+- Route 53 is configured with **Failover Routing Policy**.
+- Under normal conditions:
+  - All user traffic is routed to the **primary region (North Virginia)**.
+- If the primary region becomes unavailable:
+  - Route 53 automatically redirects traffic to the **secondary region (Oregon)**.
+- Health checks are used to monitor the availability of the primary endpoint.
 
-EC2 instances behind Application Load Balancer (ALB)
+### 🧱 Components Used
 
-Public access via Route53
+- AWS Route 53 (Failover Routing + Health Checks)
+- EC2 instances (in both regions)
+- Application deployed identically in both regions
+- Optional: Load Balancer (ALB) for better scalability
 
-Auto Scaling enabled
+### 🔁 Failover Flow
 
-🔹 Application Layer (Backend)
+1. User sends request to application domain.
+2. Route 53 resolves DNS to **primary region (us-east-1)**.
+3. If health check fails:
+   - Route 53 switches DNS to **secondary region (us-west-2)**.
+4. Traffic continues without manual intervention.
 
-Private EC2 instances
+### 🚀 Benefits
 
-Internal communication via backend ALB
+- High Availability
+- Automatic Disaster Recovery
+- Zero manual failover
+- Improved reliability for production workloads
 
-Handles business logic
+### 📷 Architecture Diagram (Optional)
 
-🔹 Database Layer
+> Add your architecture diagram here for better visualization.
 
-Primary RDS (MySQL) in us-east-1 (N. Virginia)
+### 📁 Notes
 
-Cross-region Read Replica in us-west-2 (Oregon)
-
-🌍 Multi-Region Disaster Recovery Design
-Component	Primary (us-east-1)	Secondary (us-west-2)
-VPC	✅	✅
-ALB	✅	✅
-EC2 (ASG)	✅	✅
-RDS	Primary	Read Replica
-AMI Backup	❌	✅
-Route53	Primary Routing	Failover Target
-🌐 Route53 Failover Strategy (Key Highlight 🔥)
-
-This architecture uses DNS-based failover routing:
-
-Primary traffic goes to N. Virginia (us-east-1)
-
-Secondary region (Oregon - us-west-2) acts as standby
-
-In case of failure, Route53 redirects traffic automatically
-
-🔁 Traffic Flow
-
-User hits application domain
-
-Route53 routes traffic to Primary ALB (us-east-1)
-
-If health check fails:
-👉 Traffic is redirected to
+- Ensure both regions have identical infrastructure and deployments.
+- Health check thresholds should be configured carefully to avoid false failovers.
