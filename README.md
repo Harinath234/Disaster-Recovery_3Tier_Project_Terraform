@@ -12,10 +12,83 @@ This project implements a **highly available and fault-tolerant architecture** b
 
 ![Architecture Diagram](screenshots/North-Virginia_us-east-1/Architecture_Images/Disaster-Recovery-Architecture.png)
 
-![Architecture Diagram](screenshots/North-Virginia_us-east-1/Architecture_Images/Cloud_failover_architecture_comparison.png)
+## 🌐 Traffic Flow
 
 ![Architecture Diagram](screenshots/North-Virginia_us-east-1/Architecture_Images/ArchitectureDiagram-TrafficFlow.png)
 
+## 🔁 Failover Demonstration (Step-by-Step)
+
+This section shows how traffic flows and how AWS handles failover using real screenshots.
+
+---
+
+### 🟢 Step 1: Before Failure (Primary Region Active - us-east-1)
+
+- Application is served from **North Virginia**
+- Load Balancer routes traffic to healthy instances
+- Database is primary in this region
+
+![Primary Load Balancer Output](screenshots/North-Virginia_us-east-1/Output/frontendloadbalancer-output.png)
+
+---
+
+### ❤️ Step 2: Route 53 Health Check
+
+- Route 53 continuously monitors the primary region
+- Health check ensures application availability
+- Status: Healthy ✅  
+- Route 53 confirms primary region is reachable
+- Traffic continues to us-east-1  
+
+![Route53 Health Check](screenshots/Oregon_us-west-2/HealthCheck/HealthCheck.png)
+
+---
+### 🗄️ Step 3: RDS Cross-Region Replication
+
+- Data replicated from us-east-1 → us-west-2  
+- RDS Read Replica created in DR region  
+- **Asynchronous replication ensures near real-time data sync**
+
+![Primary DB](screenshots/North-Virginia_us-east-1/Database/Database.png)
+
+![Read Replica](screenshots/Oregon_us-west-2/Database/Database-1.png)
+
+---
+
+### 🔴 Step 4: During Failure (Health Check FAILED - Primary Region Down)
+
+- Status: Unhealthy ❌  
+- Primary region not responding  
+- Primary region becomes unhealthy
+- Route 53 detects failure via health checks
+  
+![Route53 Health Check](screenshots/Oregon_us-west-2/HealthCheck/HealthCheck-2.png)
+
+---
+
+### 🔄 Step 5: After Failover (Secondary Region Active - us-west-2)
+
+- Traffic is redirected to **Oregon region**
+- Load Balancer serves requests from DR region
+- RDS Read Replica is promoted to primary
+
+![Oregon Load Balancer Output](screenshots/North-Virginia_us-east-1/Output/FrontEnd-ALB-output.png)
+
+---
+
+## 🛠️ Infrastructure as Code (Terraform)
+
+- Entire infrastructure is provisioned using Terraform  
+- Modular design for multi-region deployment  
+- Enables consistent and repeatable deployments
+- 
+## 🚀 Summary of Failover
+
+- DNS-level failover ensures zero manual intervention during outages
+- Route 53 automatically redirects traffic  
+- No manual intervention required  
+- Data remains consistent via RDS replication  
+- High availability achieved using multi-region setup  
 
 ### ⚙️ How It Works
 
