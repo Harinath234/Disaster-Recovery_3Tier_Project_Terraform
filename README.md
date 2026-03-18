@@ -7,6 +7,15 @@ This project implements a **highly available and fault-tolerant architecture** b
 - **Primary Region:** North Virginia (`us-east-1`)
 - **Secondary (Failover) Region:** Oregon (`us-west-2`)
 - **Traffic Management:** AWS Route 53 (DNS-level failover routing)
+- 
+## Architecture Diagram
+
+![Architecture Diagram](screenshots/North-Virginia_us-east-1/Architecture_Images/Disaster-Recovery-Architecture.png)
+
+![Architecture Diagram](screenshots/North-Virginia_us-east-1/Architecture_Images/Cloud_failover_architecture_comparison.png)
+
+![Architecture Diagram](screenshots/North-Virginia_us-east-1/Architecture_Images/ArchitectureDiagram-TrafficFlow.png)
+
 
 ### ⚙️ How It Works
 
